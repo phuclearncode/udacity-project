@@ -16,14 +16,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-      - name: Navigate to frontend directory
-        run: cd starter/frontend
-      - name: Check location & files
-        run: pwd && ls
       - name: Install dependencies
-        run: npm ci
+        run: cd starter/frontend && npm ci
       - name: Lint code
-        run: npm run lint
+        run: cd starter/frontend && npm run lint
   
   Test:
     runs-on: ubuntu-latest
@@ -34,12 +30,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-      - name: Navigate to frontend directory
-        run: cd ./starter/frontend
       - name: Install dependencies
-        run: npm ci 
+        run:  cd starter/frontend && npm ci 
       - name: Run tests
-        run: npm test
+        run:  cd starter/frontend && npm test
   
   Build_and_run:
     needs: [Lint, Test]
