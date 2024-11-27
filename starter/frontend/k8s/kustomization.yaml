@@ -4,3 +4,7 @@ resources:
   - service.yaml
   - deployment.yaml
 namespace: default
+images:
+  - name: frontend
+    newName: frontend
+    newTag: lastest
