@@ -18,8 +18,8 @@ jobs:
           node-version: '18.x'
       - name: Navigate to frontend directory
         run: cd ./starter/frontend
-      - name: Install NPM
-        run: npm install
+      - name: Check location & files
+        run: pwd && ls
       - name: Install dependencies
         run: npm ci
       - name: Lint code
@@ -36,8 +36,6 @@ jobs:
           node-version: '18.x'
       - name: Navigate to frontend directory
         run: cd ./starter/frontend
-      - name: Install NPM
-        run: npm install
       - name: Install dependencies
         run: npm ci 
       - name: Run tests
