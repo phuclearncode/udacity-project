@@ -1,4 +1,4 @@
-name: CI Workflow
+name: CI Pipeline for Backend
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  Lint_and_Test:
+  Lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,29 +19,52 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install pipenv
+      - name: Install tools and dependencies
         run: |
           python -m pip install --upgrade pip
           cd starter/backend
           pip install pipenv
-
-      - name: Install dependencies
-        run: |
-          cd starter/backend
           pipenv install
-
-      - name: Install flake8
-        run: |
-          cd starter/backend
           pip install flake8
-
-      - name: Run tests
-        run: |
-          cd starter/backend
-          pipenv run test
 
       - name: Run linting
         run: |
           cd starter/backend
           pipenv run lint
 
+  Test: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install tools and dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd starter/backend
+          pip install pipenv
+          pipenv install
+          pip install flake8
+      - name: Run tests
+        run: |
+          cd starter/backend
+          pipenv run test
+
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Build image and run
+        run: |
+          cd starter/backend
+          docker build -t mp-backend:latest .
+          docker run -p 5000:5000 --name mp-backend -d mp-backend
+          curl http://localhost:5000/movies

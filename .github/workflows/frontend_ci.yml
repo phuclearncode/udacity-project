@@ -50,5 +50,6 @@ jobs:
           cd ./starter/frontend
           docker build --build-arg REACT_APP_BACKEND_URL=http://localhost:5000 . -t mp-frontend:latest 
           docker run -p 3000:3000 --name mp-frontend -d mp-frontend
+          curl http://localhost:3000
   
   
