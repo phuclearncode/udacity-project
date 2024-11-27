@@ -1,4 +1,4 @@
-name: CI Pipeline for Backend
+name: CICD Pipeline for Backend
 
 on:
   workflow_dispatch:
@@ -9,7 +9,6 @@ on:
 jobs:
   Lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,10 +36,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install tools and dependencies
         run: |
           python -m pip install --upgrade pip
@@ -48,6 +49,7 @@ jobs:
           pip install pipenv
           pipenv install
           pip install flake8
+
       - name: Run tests
         run: |
           cd starter/backend
@@ -59,13 +61,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: Build image and run
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            ECR_REPOSITORY: backend
+            IMAGE_TAG: ${{ github.sha }}
         run: |
-          cd starter/backend
-          docker build -t mp-backend:latest .
-          docker run -p 5000:5000 --name mp-backend -d mp-backend
-          curl http://localhost:5000/movies
+            cd starter/frontend
+            docker build --build-arg REACT_APP_MOVIE_API_URL=http://localhost:5000 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
