@@ -58,6 +58,7 @@ jobs:
   Build:
     needs: [Lint, Test]
     runs-on: ubuntu-latest
+    environment: AWS Credential
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
