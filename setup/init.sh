@@ -10,10 +10,6 @@ echo "Downloading tool..."
 curl -X GET -L https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.6.2/aws-iam-authenticator_0.6.2_windows_amd64.exe -o aws-iam-authenticator
 chmod +x aws-iam-authenticator
 
-#Test
-echo "User ARN: ${userarn}"
-echo "Home Directory: ${HOME}"
-
 echo "Updating permissions"
 ./aws-iam-authenticator add user --userarn="${userarn}" --username=github-action-role --groups=system:masters --kubeconfig="$HOME"/.kube/config --prompt=false
 
