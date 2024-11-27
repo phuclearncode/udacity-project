@@ -1,0 +1,58 @@
+name: CI Pipeline for Frontend
+
+on:
+  push:
+    branches:
+      - main 
+  workflow_dispatch:
+
+jobs: 
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+      - name: Navigate to frontend directory
+        run: cd ./starter/frontend
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint code
+        run: npm run lint
+  
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+      - name: Navigate to frontend directory
+        run: cd ./starter/frontend
+      - name: Install dependencies
+        run: npm ci 
+      - name: Run tests
+        run: npm test
+  
+  Build_and_run:
+    needs: [Lint, Test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+      - name: Build image and run
+        run: |
+          cd ./starter/frontend
+          docker build --build-arg REACT_APP_BACKEND_URL=http://localhost:5000 . -t mp-frontend:latest 
+          docker run -p 3000:3000 --name mp-frontend -d mp-frontend
+  
+  
