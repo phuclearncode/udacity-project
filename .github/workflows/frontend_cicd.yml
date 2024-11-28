@@ -1,14 +1,14 @@
 name: CICD Pipeline for Frontend
 
 on:
-  # workflow_run:
-  #   workflows:
-  #     - CICD Pipeline for Backend
-  #   types:
-  #     - completed
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - CICD Pipeline for Backend
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
@@ -61,16 +61,19 @@ jobs:
         id: get-ip
         run: |
           aws eks update-kubeconfig --name cluster --region us-east-1
-          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" 
+          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > $GITHUB_ENV
+          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
+          REACT: ${{ env.REACT }}
         run: |
+          echo "Backend URL: $REACT"
           cd starter/frontend
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=localhost -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg REACT_APP_MOVIE_API_URL=$REACT -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
