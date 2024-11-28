@@ -128,12 +128,10 @@ jobs:
             - name: Retrieve Backend External IP
             id: get-ip
             run: |
-              export BACKEND_IP=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-              echo "Backend IP: $BACKEND_IP"
-              echo "BACKEND_IP=$BACKEND_IP" >> $GITHUB_ENV
+              echo "BACKEND_IP=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> ./backend-ip.env
 
           - name: Save Backend IP as Artifact
             uses: actions/upload-artifact@v3
             with:
               name: backend-ip
-              path: $GITHUB_ENV
+              path: ./backend-ip.env
