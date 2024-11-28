@@ -71,6 +71,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           REACT_APP_MOVIE_API_URL: ${{ env.REACT_APP_MOVIE_API_URL }}
         run: |
+          echo "Backend URL: $REACT_APP_MOVIE_API_URL"
           cd starter/frontend
           docker build --build-arg=REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
