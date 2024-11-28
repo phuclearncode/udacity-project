@@ -61,19 +61,19 @@ jobs:
         id: get-ip
         run: |
           aws eks update-kubeconfig --name cluster --region us-east-1
-          echo "REACT_APP_MOVIE_API_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > $GITHUB_ENV
-          echo "REACT_APP_MOVIE_API_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
+          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > $GITHUB_ENV
+          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: ${{ env.REACT_APP_MOVIE_API_URL }}
+          REACT: ${{ env.REACT }}
         run: |
-          echo "Backend URL: $REACT_APP_MOVIE_API_URL"
+          echo "Backend URL: $REACT"
           cd starter/frontend
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=$REACT -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
