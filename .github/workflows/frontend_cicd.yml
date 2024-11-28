@@ -69,9 +69,8 @@ jobs:
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "Backend URL: $REACT"
           cd starter/frontend
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=a3cdda5fb5c1741b78e8c64bd6d8c126-1618896277.us-east-1.elb.amazonaws.com -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=localhost -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
