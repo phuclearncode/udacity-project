@@ -60,7 +60,8 @@ jobs:
       - name: Retrieve Backend External IP
         id: get-ip
         run: |
-          echo "REACT_APP_MOVIE_API_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_ENV
+          echo "REACT_APP_MOVIE_API_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > $GITHUB_ENV
+          echo "REACT_APP_MOVIE_API_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
