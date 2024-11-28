@@ -6,9 +6,9 @@ on:
       - CICD Pipeline for Backend
     types:
       - completed
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
@@ -47,10 +47,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: backend-ip
-          path: backend-ip.env
+          path: ./backend-ip.env
       - name: Export Backend IP
         run: |
-          source backend-ip.env
+          source ./backend-ip.env
           echo "Backend IP is $BACKEND_IP"
 
   BuildAndPushImage:
