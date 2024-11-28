@@ -125,13 +125,13 @@ jobs:
           kustomize build | kubectl apply -f -
 
 
-      - name: Retrieve Backend External IP
-        id: get-ip
-        run: |
-          echo "BACKEND_IP=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" >> ./backend-ip.env
+      # - name: Retrieve Backend External IP
+      #   id: get-ip
+      #   run: |
+      #     echo "BACKEND_IP=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > backend-ip.env
 
-      - name: Save Backend IP as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: backend-ip
-          path: ./backend-ip.env
+      # - name: Save Backend IP as Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: backend-ip
+      #     path: backend-ip.env
