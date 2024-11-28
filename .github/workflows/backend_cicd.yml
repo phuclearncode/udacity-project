@@ -123,3 +123,17 @@ jobs:
           aws eks update-kubeconfig --name cluster --region us-east-1
           kustomize edit set image backend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           kustomize build | kubectl apply -f -
+
+
+            - name: Retrieve Backend External IP
+            id: get-ip
+            run: |
+              export BACKEND_IP=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+              echo "Backend IP: $BACKEND_IP"
+              echo "BACKEND_IP=$BACKEND_IP" >> $GITHUB_ENV
+
+          - name: Save Backend IP as Artifact
+            uses: actions/upload-artifact@v3
+            with:
+              name: backend-ip
+              path: $GITHUB_ENV
