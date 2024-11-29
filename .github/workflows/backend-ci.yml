@@ -2,7 +2,7 @@ name: Backend Continuous Integration
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
 
