@@ -61,8 +61,8 @@ jobs:
         id: get-ip
         run: |
           aws eks update-kubeconfig --name cluster --region us-east-1
-          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > $GITHUB_ENV
-          echo "REACT=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
+          echo "REACT_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')" > $GITHUB_ENV
+          echo "REACT_URL=$(kubectl get svc backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
