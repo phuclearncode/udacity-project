@@ -3,7 +3,7 @@ name: Frontend Continuous Deployment
 on:
   workflow_run:
     workflows:
-      - CICD Pipeline for Backend
+      - Backend Continuous Deployment
     types:
       - completed
   pull_request:
