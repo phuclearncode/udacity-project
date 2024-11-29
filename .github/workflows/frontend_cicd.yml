@@ -69,7 +69,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
-          REACT: ${{ env.REACT }}
+          REACT: ${{ env.REACT_URL }}
         run: |
           echo "Backend URL: $REACT"
           cd starter/frontend
