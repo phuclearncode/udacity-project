@@ -1,4 +1,4 @@
-name: CICD Pipeline for Frontend
+name: Frontend Continuous Deployment
 
 on:
   workflow_run:
@@ -6,9 +6,9 @@ on:
       - CICD Pipeline for Backend
     types:
       - completed
-  # push:
-  #   branches:
-  #     - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:

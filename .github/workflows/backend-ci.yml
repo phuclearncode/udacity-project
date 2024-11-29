@@ -1,4 +1,4 @@
-name: CI Pipeline for Backend
+name: Backend Continuous Integration
 
 on:
   workflow_dispatch:
