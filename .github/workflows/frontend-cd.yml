@@ -6,7 +6,7 @@ on:
       - Backend Continuous Deployment
     types:
       - completed
-  pull_request:
+  push:
     branches:
       - main
   workflow_dispatch:
@@ -103,4 +103,4 @@ jobs:
           aws eks update-kubeconfig --name cluster --region us-east-1
           kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-
+          kubectl get svc -A

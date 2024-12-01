@@ -16,6 +16,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: starter/frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('starter/frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Install dependencies
         run: cd starter/frontend && npm ci
       - name: Lint code
@@ -30,6 +37,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: starter/frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('starter/frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Install dependencies
         run:  cd starter/frontend && npm ci 
       - name: Run tests
@@ -45,6 +59,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: starter/frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('starter/frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Build image and run
         run: |
           cd ./starter/frontend
