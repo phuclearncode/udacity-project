@@ -98,4 +98,7 @@ jobs:
           aws eks update-kubeconfig --name cluster --region us-east-1
           kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-          kubectl get svc
+      - name: Get the Frontend Service URL
+        run: |
+          aws eks update-kubeconfig --name cluster --region us-east-1
+          echo "FRONTEND_URL=http://$(kubectl get svc frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
